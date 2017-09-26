@@ -1,8 +1,7 @@
 #!/usr/bin/env php
 <?php
 /*
- * Запускать с теми же параметрами, что и консольный клиент mysql.
- * ./index.php -h localhost -u t99342 -p t99342 -d fst -b 200
+ * ./index.php -b 200
  *
  * -b - размер пакета обработки данных. По умолчанию - 100 строк
  */
@@ -14,18 +13,16 @@ set_error_handler(function ($code, $message, $file, $line, $args) {
     throw new \ErrorException($message, $code);
 });
 
-$opts = getopt($optstr = 'h:u:p:d:b:');
-for ($i=0; $i < strlen($optstr); ':' == $optstr[++$i] && ++$i) {
-    if (empty($opts[$optstr[$i]])) {
-        fwrite(STDERR, '  Usage: php ' . $_SERVER['PHP_SELF'] . " -h host -u user -p password -d db_name -b batch_size\n");
-        exit(1);
-    }
+$opts = getopt($optstr = 'b:');
+if (empty($opts['b'])) {
+    fwrite(STDERR, '  Usage: php ' . $_SERVER['PHP_SELF'] . " -b batch_size\n");
+    exit(1);
 }
 
 $db = new \PDO(
-    "mysql:dbname={$opts['d']};host={$opts['h']}",
-    $opts['u'],
-    $opts['p'],
+    "mysql:dbname=fst;host=localhost",
+    't99342',
+    't99342',
     [
         PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'",
         PDO::MYSQL_ATTR_COMPRESS     => true,

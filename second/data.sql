@@ -15,6 +15,6 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO users VALUES
 (null, 'Jane', 0, 'jane@mailinator.com,jane_doe@mail.ru'),
 (null, 'Joy',  0, 'joy@mailinator.com'),
-(null, 'John', 1, 'john@mailinator.com,john_doe@yandex.ru'),
+(null, 'John', 1, 'john@mailinator.com,john_doe@yandex.ru,john_doe@mail.ru'),
 (null, 'Nemo', 1, '')
 ;
