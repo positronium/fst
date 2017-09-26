@@ -27,6 +27,8 @@ namespace Positronium\NewsFeed;
 class Feed
 {
 
+    const CONTENT_LENGTH_LIMIT = 243;
+
     /**
      * @var \PDO
      */
@@ -46,9 +48,11 @@ class Feed
      */
     public function addNew($content, array $categories = [])
     {
+        if (mb_strlen($content, 'UTF-8') > static::CONTENT_LENGTH_LIMIT) {
+            throw new \InvalidArgumentException("New content too long, limit is " . static::CONTENT_LENGTH_LIMIT);
+        }
         try {
             $this->pdo->beginTransaction();
-
             if (!$this->pdo->prepare("INSERT INTO New (content) VALUES (?)")->execute([$content])) {
                 throw new \RuntimeException("Cannot insert new");
             }
