@@ -67,14 +67,19 @@ class FileLineIterator implements \SeekableIterator
      */
     private function loadPositions()
     {
+        $limit = 8192;
         $pos = 0;
         $i = 0;
         $this->linesPositions[$i] = 0;
-        while (!feof($this->handle) && ($line = fgets($this->handle))) {
-            ++$i;
+        while (!feof($this->handle) && ($line = fgets($this->handle, $limit))) {
             $len = strlen($line);
-            $this->linesPositions[$i] = $len + $pos;
+            // echo "   $line\n";
             $pos += $len;
+            if ($len === $limit - 1 && "\n" !== $line[$limit - 2]) {
+                continue;
+            }
+            ++$i;
+            $this->linesPositions[$i] = $pos;
         }
     }
 
